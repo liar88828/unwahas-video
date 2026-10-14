@@ -1,11 +1,12 @@
 # UNWAHAS Video Library
 
-Video processing, WebRTC signaling, and room management package for PHP & Laravel.
+Video processing and management library for PHP / Laravel with WebRTC signaling and room management.
 
 ## Requirements
 
 - PHP >= 8.2
-- Laravel 10.x, 11.x, or 12.x
+- Laravel 10.x, 11.x, 12.x, or 13.x (`illuminate/database` & `illuminate/support`)
+- Inertia.js Laravel `^2.0 || ^3.0` (`inertiajs/inertia-laravel`)
 - Laravel Reverb (or any Pusher-compatible WebSocket server)
 
 ## Installation
@@ -16,7 +17,22 @@ composer require unwahas/video
 
 ## Laravel Integration
 
-The package registers automatically via Laravel package discovery.
+The package registers automatically via Laravel package discovery:
+
+- **Service Provider:** `Unwahas\Video\VideoServiceProvider`
+- **Facade:** `Unwahas\Video\Facades\Video` (aliased as `Video`)
+
+If you don't use package auto-discovery, you can register them manually in `config/app.php` (or `bootstrap/providers.php` in Laravel 11+):
+
+```php
+'providers' => [
+    Unwahas\Video\VideoServiceProvider::class,
+],
+
+'aliases' => [
+    'Video' => Unwahas\Video\Facades\Video::class,
+],
+```
 
 ### Scaffolding & Publishing to Your Application
 
@@ -147,7 +163,15 @@ Routes provided:
 
 ---
 
-## Models & Usage
+## Usage & Models
+
+### Video Facade
+
+```php
+use Video; // or use Unwahas\Video\Facades\Video;
+
+$version = Video::version(); // "1.0.x"
+```
 
 ### VideoRoom Model
 
