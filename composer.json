@@ -1,0 +1,55 @@
+{
+    "name": "unwahas/video",
+    "description": "Video processing and management library for PHP / Laravel",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "video",
+        "unwahas"
+    ],
+    "authors": [
+        {
+            "name": "UNWAHAS Dev Team",
+            "email": "liar88828@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "illuminate/database": "^10.0 || ^11.0 || ^12.0",
+        "illuminate/support": "^10.0 || ^11.0 || ^12.0",
+        "inertiajs/inertia-laravel": "^3.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
+        "phpunit/phpunit": "^10.0 || ^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Unwahas\\Video\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Unwahas\\Video\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Unwahas\\Video\\VideoServiceProvider"
+            ],
+            "aliases": {
+                "Video": "Unwahas\\Video\\Facades\\Video"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

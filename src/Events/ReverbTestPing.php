@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Unwahas\Video\Events;
+
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+
+class ReverbTestPing implements ShouldBroadcastNow
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * Create a new event instance.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function __construct(
+        public array $data,
+        public string $senderName,
+        public string $timestamp
+    ) {}
+
+    /**
+     * Get the channels the event should broadcast on.
+     */
+    public function broadcastOn(): Channel
+    {
+        return new PresenceChannel('reverb-monitoring');
+    }
+
+    /**
+     * The event's broadcast name.
+     */
+    public function broadcastAs(): string
+    {
+        return 'ReverbTestPing';
+    }
+}

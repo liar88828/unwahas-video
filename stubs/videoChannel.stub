@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Support\Facades\Broadcast;
+
+// Presence channel for video meeting room signaling (WebRTC offer, answer, ice-candidates)
+Broadcast::channel('video-room.{roomId}', function ($user, string $roomId): ?array {
+    if (! $user) {
+        return null;
+    }
+
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email ?? null,
+        'role' => $user->role ?? (method_exists($user, 'isDosen') && $user->isDosen() ? 'dosen' : 'mahasiswa'),
+    ];
+});
+
+// Presence channel for Reverb WebSocket monitoring & ping health check
+Broadcast::channel('reverb-monitoring', function ($user): ?array {
+    if (! $user) {
+        return null;
+    }
+
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email ?? null,
+        'role' => $user->role ?? (method_exists($user, 'isDosen') && $user->isDosen() ? 'dosen' : 'mahasiswa'),
+    ];
+});
