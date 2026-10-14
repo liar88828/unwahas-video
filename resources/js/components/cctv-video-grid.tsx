@@ -27,8 +27,8 @@ export function CctvVideoGrid({
                 displayedPeers.length === 0
                     ? 'mx-auto max-w-xl grid-cols-1'
                     : displayedPeers.length === 1
-                      ? 'mx-auto max-w-5xl grid-cols-1 md:grid-cols-2'
-                      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                        ? 'mx-auto max-w-5xl grid-cols-1 md:grid-cols-2'
+                        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
             }`}
         >
             {/* Tile 00: Kamera Dosen Sendiri (Pengawas) */}

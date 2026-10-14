@@ -139,6 +139,12 @@ class InstallVideoCommand extends Command
             $namespace,
             $force
         );
+        $this->publishFile(
+            __DIR__ . '/../../../stubs/cctv-video-grid-example.stub',
+            resource_path('js/components/cctv-video-grid-example.tsx'),
+            $namespace,
+            $force
+        );
 
         // 7. Register in web.php and channels.php
         if (! $this->option('no-routes')) {

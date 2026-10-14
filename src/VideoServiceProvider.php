@@ -99,6 +99,7 @@ class VideoServiceProvider extends ServiceProvider
                 __DIR__ . '/../resources/js/lib/format-date.ts' => resource_path('js/lib/format-date.ts'),
                 __DIR__ . '/../resources/js/components/cctv-video-tile.tsx' => resource_path('js/components/cctv-video-tile.tsx'),
                 __DIR__ . '/../resources/js/components/cctv-video-grid.tsx' => resource_path('js/components/cctv-video-grid.tsx'),
+                __DIR__ . '/../resources/js/components/cctv-video-grid-example.tsx' => resource_path('js/components/cctv-video-grid-example.tsx'),
             ], ['unwahas-video-react', 'video-react']);
 
             // Publish all in one tag
@@ -117,6 +118,7 @@ class VideoServiceProvider extends ServiceProvider
                 __DIR__ . '/../resources/js/types/webrtc.ts' => resource_path('js/types/webrtc.ts'),
                 __DIR__ . '/../resources/js/components/cctv-video-tile.tsx' => resource_path('js/components/cctv-video-tile.tsx'),
                 __DIR__ . '/../resources/js/components/cctv-video-grid.tsx' => resource_path('js/components/cctv-video-grid.tsx'),
+                __DIR__ . '/../resources/js/components/cctv-video-grid-example.tsx' => resource_path('js/components/cctv-video-grid-example.tsx'),
             ], ['unwahas-video', 'video']);
         }
     }

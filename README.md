@@ -59,6 +59,7 @@ php artisan unwahas-video:publish
 - `resources/js/hooks/use-webrtc.ts` (React WebRTC hook)
 - `resources/js/components/cctv-video-tile.tsx` (CCTV Video Tile component)
 - `resources/js/components/cctv-video-grid.tsx` (Dynamic CCTV Grid component)
+- `resources/js/components/cctv-video-grid-example.tsx` (Complete CCTV Grid + useWebRTC example component)
 
 #### Frontend NPM Requirements
 Make sure your application has `laravel-echo`, `pusher-js`, and `lucide-react` installed:
@@ -208,8 +209,9 @@ Files created:
 - `resources/js/lib/format-date.ts`
 - `resources/js/components/cctv-video-tile.tsx`
 - `resources/js/components/cctv-video-grid.tsx`
+- `resources/js/components/cctv-video-grid-example.tsx`
 
-### React Component Example:
+### React WebRTC Hook Example:
 
 ```tsx
 import { useWebRTC } from '@/hooks/use-webrtc';
@@ -219,8 +221,8 @@ export function VideoRoomComponent({ room, currentUser }) {
         localStream,
         remoteStreams,
         peers,
-        isAudioMuted,
-        isVideoDisabled,
+        isAudioEnabled,
+        isVideoEnabled,
         isScreenSharing,
         activeScreenShareUserId,
         toggleAudio,
@@ -241,6 +243,83 @@ export function VideoRoomComponent({ room, currentUser }) {
     });
 
     // ... render local and remote video elements
+}
+```
+
+### CCTV Video Grid Example (`CctvVideoGrid` + `useWebRTC`):
+
+The package includes a ready-to-use CCTV examination/monitoring grid (`CctvVideoGrid`) and an example implementation (`CctvVideoGridExample`):
+
+```tsx
+import React from 'react';
+import { CctvVideoGrid } from '@/components/cctv-video-grid';
+import { useWebRTC } from '@/hooks/use-webrtc';
+import type { RoomUser } from '@/types/webrtc';
+
+export function CctvVideoGridExample() {
+    const currentUser: RoomUser = {
+        id: 'dosen-1',
+        name: 'Dr. Budi Santoso',
+        role: 'dosen',
+    };
+
+    const {
+        localStream,
+        remoteStreams,
+        peers,
+        isAudioEnabled,
+        isVideoEnabled,
+        toggleAudio,
+        toggleVideo,
+        connectionStatus,
+    } = useWebRTC({
+        roomSlug: 'uas-pemrograman-web',
+        channelName: 'video-room.uas-pemrograman-web',
+        currentUser,
+    });
+
+    return (
+        <div className="space-y-4 p-4">
+            {/* Control Bar Header */}
+            <div className="flex items-center justify-between rounded-lg bg-neutral-900 p-3 text-white">
+                <div>
+                    <h2 className="text-lg font-bold">UAS Pemrograman Web - CCTV Monitor</h2>
+                    <p className="text-xs text-neutral-400">
+                        Status: <span className="font-semibold text-emerald-400">{connectionStatus}</span> | 
+                        Peserta: {peers.length}
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={toggleAudio}
+                        className={`rounded px-3 py-1.5 text-xs font-semibold ${
+                            isAudioEnabled ? 'bg-emerald-600' : 'bg-rose-600'
+                        }`}
+                    >
+                        {isAudioEnabled ? 'Mic Aktif' : 'Mic Bisu'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={toggleVideo}
+                        className={`rounded px-3 py-1.5 text-xs font-semibold ${
+                            isVideoEnabled ? 'bg-emerald-600' : 'bg-rose-600'
+                        }`}
+                    >
+                        {isVideoEnabled ? 'Kamera Aktif' : 'Kamera Mati'}
+                    </button>
+                </div>
+            </div>
+
+            {/* Render Base CCTV Grid Component */}
+            <CctvVideoGrid
+                localStream={localStream}
+                remoteStreams={remoteStreams}
+                displayedPeers={peers}
+                currentUserName={currentUser.name}
+            />
+        </div>
+    );
 }
 ```
 

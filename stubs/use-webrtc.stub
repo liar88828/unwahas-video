@@ -97,20 +97,20 @@ export function useWebRTC({
     const [localStream, setLocalStream] = useState<MediaStream | null>(null);
     const [ remoteStreams, setRemoteStreams ] = useState<Map<string, MediaStream>>( new Map() );
     const [peers, setPeers] = useState<RoomUser[]>([]);
-    const [ isAudioMuted, setIsAudioMuted ] = useState(!initialAudioEnabled);
-    const [ isVideoDisabled, setIsVideoDisabled ] = useState(!initialVideoEnabled);
+    const [ isAudioEnabled, setIsAudioEnabled ] = useState(initialAudioEnabled);
+    const [ isVideoEnabled, setIsVideoEnabled ] = useState(initialVideoEnabled);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
     const [ activeScreenShareUserId, setActiveScreenShareUserId ] = useState<string | null>( null );
     const [ videoQuality, setVideoQuality ] = useState<VideoQuality>( effectiveDefaultQuality, );
     const [ connectionStatus, setConnectionStatus ] = useState<ConnectionStatus>( 'idle' );
     const [ errorMessage, setErrorMessage ] = useState<string | null>( null );
 
-    const isAudioMutedRef = useRef(isAudioMuted);
-    const isVideoDisabledRef = useRef(isVideoDisabled);
+    const isAudioEnabledRef = useRef(isAudioEnabled);
+    const isVideoEnabledRef = useRef(isVideoEnabled);
 
     useEffect(() => {
-        isAudioMutedRef.current = isAudioMuted;
-        isVideoDisabledRef.current = isVideoDisabled;
+        isAudioEnabledRef.current = isAudioEnabled;
+        isVideoEnabledRef.current = isVideoEnabled;
     });
 
     const peerConnections = useRef<Map<string, RTCPeerConnection>>( new Map(), );
@@ -655,14 +655,14 @@ export function useWebRTC({
                     return;
                 }
 
-                // Apply initial audio mute & video disabled preferences
+                // Apply initial audio & video enabled preferences
                 const audioTrack = stream.getAudioTracks()[0];
-                if (audioTrack && isAudioMutedRef.current) {
+                if (audioTrack && !isAudioEnabledRef.current) {
                     audioTrack.enabled = false;
                 }
 
                 const videoTrack = stream.getVideoTracks()[0];
-                if (videoTrack && isVideoDisabledRef.current) {
+                if (videoTrack && !isVideoEnabledRef.current) {
                     videoTrack.enabled = false;
                 }
 
@@ -893,7 +893,7 @@ export function useWebRTC({
                     }
                 });
 
-                setIsAudioMuted(false);
+                setIsAudioEnabled(true);
                 if (localStreamRef.current) {
                     setLocalStream(new MediaStream(cam.getTracks()));
                 }
@@ -905,8 +905,7 @@ export function useWebRTC({
         }
 
         audioTrack.enabled = !audioTrack.enabled;
-        const nextMuted = !audioTrack.enabled;
-        setIsAudioMuted(nextMuted);
+        setIsAudioEnabled(audioTrack.enabled);
 
         // Clone only for React state so refs stay stable
         if (localStreamRef.current) {
@@ -946,7 +945,7 @@ export function useWebRTC({
                     });
                 }
                 // track baru sudah enabled; jangan di-toggle lagi
-                setIsVideoDisabled(false);
+                setIsVideoEnabled(true);
                 if (!screenStreamRef.current)
                     setLocalStream(new MediaStream(cam.getTracks()));
                 return;
@@ -960,8 +959,7 @@ export function useWebRTC({
         }
 
         videoTrack.enabled = !videoTrack.enabled;
-        const nextDisabled = !videoTrack.enabled;
-        setIsVideoDisabled(nextDisabled);
+        setIsVideoEnabled(videoTrack.enabled);
         if (!screenStreamRef.current)
             setLocalStream(new MediaStream(cam.getTracks()));
     }, []);
@@ -1171,8 +1169,10 @@ export function useWebRTC({
         localStream,
         remoteStreams,
         peers,
-        isAudioMuted,
-        isVideoDisabled,
+        isAudioEnabled,
+        isVideoEnabled,
+        isAudioMuted: !isAudioEnabled,
+        isVideoDisabled: !isVideoEnabled,
         isScreenSharing,
         activeScreenShareUserId,
         videoQuality,
